@@ -1,10 +1,10 @@
-mod middlewares;
+mod config;
 mod routes;
 
 use routes::create_routes;
 
 pub async fn run() {
-    let port = 8080;
+    let port: i32 = 8080;
 
     let routes = create_routes().await;
 

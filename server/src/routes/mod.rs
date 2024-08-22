@@ -1,31 +1,21 @@
-mod create_user;
-mod db_config;
+mod crud;
+mod middlewares;
 mod root;
 
-use create_user::create_user;
-use db_config::create_pool;
-use db_config::get_users;
+use crate::config::create_pool;
+use crud::{create_user, get_users};
+use middlewares::*;
 use root::root;
 
-use axum::{
-    http::Method,
-    routing::{get, post},
-    Router,
-};
-use tower_http::cors::{Any, CorsLayer};
+use axum::{routing::get, Router};
 
 pub async fn create_routes() -> Router {
     let pool = create_pool().await;
-    let cors = CorsLayer::new()
-        .allow_methods([Method::GET, Method::POST])
-        .allow_origin(Any);
+    let cors = create_cors().await;
 
     Router::new()
         .route("/", get(root))
-        .to_owned()
-        .route("/users", post(create_user))
-        .to_owned()
-        .route("/db", get(get_users))
+        .route("/api/users", get(get_users).post(create_user))
         .with_state(pool)
         .layer(cors)
 }

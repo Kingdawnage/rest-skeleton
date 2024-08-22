@@ -40,3 +40,4 @@ next-env.d.ts
 
 # backend build files
 /server/target
+/server/.sqlx
