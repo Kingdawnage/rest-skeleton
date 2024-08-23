@@ -1,4 +1,5 @@
 mod config;
+mod middlewares;
 mod routes;
 
 use routes::create_routes;
